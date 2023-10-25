@@ -2,7 +2,7 @@ import path from 'path'
 import fs from 'fs'
 import { LAYOUT_VERSION } from '@pnpm/constants'
 import { PnpmError } from '@pnpm/error'
-import loadNpmConf from '@pnpm/npm-conf'
+import loadNpmConf from '../../../../npm-conf/index.js'
 import npmTypes from '@pnpm/npm-conf/lib/types'
 import { requireHooks } from '@pnpm/pnpmfile'
 import { safeReadProjectManifestOnly } from '@pnpm/read-project-manifest'
@@ -269,11 +269,16 @@ export async function getConfig (
   process.execPath = originalExecPath
 
   const rcOptions = Object.keys(rcOptionsTypes)
-
+  // rcOptions  = [..., 'public-hoist-pattern' , ...]
+  // cliOptions = {}
+  console.log(npmConfig.get('public-hoist-pattern'))
+  // !!! 最终是通过 npmConfig.get('public-hoist-pattern') 得到的 string
   const pnpmConfig: ConfigWithDeprecatedSettings = Object.fromEntries([
     ...rcOptions.map((configKey) => [camelcase(configKey), npmConfig.get(configKey)]) as any, // eslint-disable-line
     ...Object.entries(cliOptions).filter(([name, value]) => typeof value !== 'undefined').map(([name, value]) => [camelcase(name), value]),
   ]) as unknown as ConfigWithDeprecatedSettings
+  // 这里已经有值了
+
   const cwd = betterPathResolve(cliOptions.dir ?? npmConfig.localPrefix)
 
   pnpmConfig.maxSockets = npmConfig.maxsockets
