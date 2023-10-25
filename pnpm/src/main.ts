@@ -90,6 +90,7 @@ export async function main (inputArgv: string[]) {
     // When we just want to print the location of the global bin directory,
     // we don't need the write permission to it. Related issue: #2700
     const globalDirShouldAllowWrite = cmd !== 'root'
+    // 这里
     config = await getConfig(cliOptions, {
       excludeReporter: false,
       globalDirShouldAllowWrite,
@@ -275,6 +276,7 @@ export async function main (inputArgv: string[]) {
       config.extraBinPaths.push(nodePath)
       config.nodeVersion = config.useNodeVersion
     }
+    // 走到这里
     let result = pnpmCmds[cmd ?? 'help'](
       // TypeScript doesn't currently infer that the type of config
       // is `Omit<typeof config, 'reporter'>` after the `delete config.reporter` statement

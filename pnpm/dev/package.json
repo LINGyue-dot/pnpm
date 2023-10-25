@@ -1,6 +1,7 @@
 {
   "name": "pd",
   "version": "1.0.0",
-  "bin": "pd.js",
-  "private": true
+  "bin": {
+    "pd": "pd.js"
+  }
 }

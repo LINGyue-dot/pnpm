@@ -108,8 +108,8 @@ export async function getContext (
   const modulesDir = opts.modulesDir ?? 'node_modules'
   let importersContext = await readProjectsContext(opts.allProjects, { lockfileDir: opts.lockfileDir, modulesDir })
   const virtualStoreDir = pathAbsolute(opts.virtualStoreDir ?? path.join(modulesDir, '.pnpm'), opts.lockfileDir)
-
   if (importersContext.modules != null) {
+    // 走这里
     const { purged } = await validateModules(importersContext.modules, importersContext.projects, {
       currentHoistPattern: importersContext.currentHoistPattern,
       currentPublicHoistPattern: importersContext.currentPublicHoistPattern,
@@ -231,6 +231,11 @@ async function validateModules (
   }
 ): Promise<{ purged: boolean }> {
   const rootProject = projects.find(({ id }) => id === '.')
+  // [ '*@ant-design/icons*', '@tusen/fe-lib', '*rc-picker*' ]  object true
+  console.log(modules.publicHoistPattern, typeof modules.publicHoistPattern, Array.isArray(modules.publicHoistPattern))
+  // npx  : *@ant-design/icons* \n @tusen/fe-lib \n *rc-picker* string false
+  // pnpx : [ '*@ant-design/icons*', '@tusen/fe-lib', '*rc-picker*' ] object true
+  console.log(opts.publicHoistPattern, typeof opts.publicHoistPattern, Array.isArray(opts.publicHoistPattern))
   if (
     opts.forcePublicHoistPattern &&
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing

@@ -168,9 +168,21 @@ export async function handler (
   opts: UpdateCommandOptions,
   params: string[] = []
 ) {
+  console.log(171,'----------------')
+  const stack = new Error().stack;
+  try {
+    throw new Error();
+  } catch (error) {
+    const stackLines = error.stack.split('\n');
+    // 第三行通常包含调用位置信息，根据实际情况可能会有所不同
+    const callerLine = stackLines[2].trim();
+    console.log(`Caller Location: ${callerLine}`);
+  }
+  //
   if (opts.interactive) {
     return interactiveUpdate(params, opts)
   }
+  // 走这里
   return update(params, opts)
 }
 
@@ -282,6 +294,7 @@ async function update (
     optionalDependencies: opts.rawConfig.optional !== false,
   }
   const depth = opts.depth ?? Infinity
+
   return installDeps({
     ...opts,
     allowNew: false,

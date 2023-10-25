@@ -148,6 +148,7 @@ export async function install (
   } & InstallMutationOptions
 ) {
   const rootDir = opts.dir ?? process.cwd()
+  // 走这
   const { updatedProjects: projects } = await mutateModules(
     [
       {
@@ -231,6 +232,7 @@ export async function mutateModules (
     streamParser.on('data', reporter)
   }
 
+  // 这时候 maybeOpts 已经是 string
   const opts = extendOptions(maybeOpts)
 
   if (!opts.include.dependencies && opts.include.optionalDependencies) {
@@ -245,7 +247,7 @@ export async function mutateModules (
     // When running install/update on a subset of projects, the root project might not be included,
     // so reading its manifest explicitly here.
     await safeReadProjectManifestOnly(opts.lockfileDir)
-
+    // here
   const ctx = await getContext(opts)
 
   if (opts.hooks.preResolution) {

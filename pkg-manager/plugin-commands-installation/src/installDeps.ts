@@ -118,6 +118,7 @@ export async function installDeps (
   opts: InstallDepsOptions,
   params: string[]
 ) {
+  // 此时 opts 已经有 publicHoistPattern string
   if (opts.workspace) {
     if (opts.latest) {
       throw new PnpmError('BAD_OPTIONS', 'Cannot use --latest with --workspace simultaneously')
@@ -219,6 +220,7 @@ when running add/update with the --workspace option')
   }
 
   const store = await createOrConnectStoreController(opts)
+  // 此时 opts 有了
   const installOpts: Omit<MutateModulesOptions, 'allProjects'> = {
     ...opts,
     ...getOptionsFromRootManifest(opts.dir, manifest),
@@ -297,7 +299,8 @@ when running add/update with the --workspace option')
     }
     return
   }
-
+  console.log(installOpts.publicHoistPattern)
+  // 走这里
   const updatedManifest = await install(manifest, installOpts)
   if (opts.update === true && opts.save !== false) {
     await writeProjectManifest(updatedManifest)
